@@ -73,7 +73,14 @@ void handle_response(char *request, int client_sock) {
       handle_increment(client_sock);
       return;
     }
-    else if(
+    else if(strstr(path, "/add?value=") == path) { // Check if the path starts with "/add?value="
+        int value = 0;
+        if(sscanf(path, "/add?value=%3d", &value) == 1) { // Parse a 3-digit integer
+            handle_add(client_sock, value);
+        } else {
+            handle_404(client_sock, path); // Handle cases where parsing fails
+        }
+    }
     else {
       handle_404(client_sock, path);
     }
